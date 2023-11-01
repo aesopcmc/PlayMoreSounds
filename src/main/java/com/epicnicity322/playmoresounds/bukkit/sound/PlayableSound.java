@@ -18,6 +18,7 @@
 
 package com.epicnicity322.playmoresounds.bukkit.sound;
 
+import com.epicnicity322.epicpluginlib.bukkit.logger.Logger;
 import com.epicnicity322.playmoresounds.bukkit.PlayMoreSounds;
 import com.epicnicity322.playmoresounds.core.sound.Sound;
 import com.epicnicity322.playmoresounds.core.sound.SoundCategory;
@@ -35,6 +36,8 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class PlayableSound extends Sound implements Delayable {
+    private static final @NotNull Logger logger = new Logger("&f[&4PlayMoreSounds&f]");
+
     public PlayableSound(@Nullable String id, @NotNull String sound, @Nullable SoundCategory category, float volume, float pitch, long delay, @Nullable SoundOptions options) {
         super(id, sound, category, volume, pitch, delay, options);
 
@@ -103,8 +106,10 @@ public class PlayableSound extends Sound implements Delayable {
             if (!event.validateListener(listener)) continue;
 
             if (event.playingGlobally()) {
+                //logger.log("播放声音名称-全局：" + getSound(), ConsoleLogger.Level.INFO);
                 listener.playSound(listener.getLocation(), getSound(), getCategory().asBukkit(), getVolume(), getPitch());
             } else {
+                //logger.log("播放声音名称-个人：" + getSound(), ConsoleLogger.Level.INFO);
                 listener.playSound(event.location, getSound(), getCategory().asBukkit(), getVolume(), getPitch());
             }
         }

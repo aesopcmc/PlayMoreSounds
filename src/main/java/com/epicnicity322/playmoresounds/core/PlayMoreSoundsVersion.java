@@ -22,7 +22,7 @@ import com.epicnicity322.epicpluginlib.core.tools.Version;
 import org.jetbrains.annotations.NotNull;
 
 public final class PlayMoreSoundsVersion {
-    public static final @NotNull String version = "5.0";
+    public static final @NotNull String version = "5.0.1";
     private static final @NotNull Version versionVersion = new Version(version);
 
     /**

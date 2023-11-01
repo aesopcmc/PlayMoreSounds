@@ -18,10 +18,12 @@
 
 package com.epicnicity322.playmoresounds.bukkit.listeners;
 
+import com.epicnicity322.epicpluginlib.bukkit.logger.Logger;
 import com.epicnicity322.playmoresounds.bukkit.PlayMoreSounds;
 import com.epicnicity322.playmoresounds.bukkit.sound.PlayableRichSound;
 import com.epicnicity322.playmoresounds.core.config.Configurations;
 import com.epicnicity322.yamlhandler.ConfigurationSection;
+import io.papermc.paper.event.player.AsyncChatEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -35,6 +37,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 public final class OnAsyncPlayerChat extends PMSListener {
+    private static final @NotNull Logger logger = new Logger("&f[&4PlayMoreSounds&f]");
+
     private final @NotNull HashMap<String, HashSet<PlayableRichSound>> filtersAndCriteria = new HashMap<>();
 
     public OnAsyncPlayerChat(@NotNull PlayMoreSounds plugin) {
@@ -100,12 +104,14 @@ public final class OnAsyncPlayerChat extends PMSListener {
     @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
+        //logger.log("监听到玩家输入消息1");
         var message = event.getMessage();
         var player = event.getPlayer();
         boolean defaultSound = getRichSound() != null;
 
         filterLoop:
         for (Map.Entry<String, HashSet<PlayableRichSound>> filter : filtersAndCriteria.entrySet()) {
+            //logger.log("进入循环filtersAndCriteria");
             for (var criteria : filter.getValue()) {
                 ConfigurationSection criteriaSection = criteria.getSection();
 
@@ -122,8 +128,10 @@ public final class OnAsyncPlayerChat extends PMSListener {
                 }
             }
         }
-
-        if (defaultSound && (!event.isCancelled() || !getRichSound().isCancellable()))
+        //logger.log("监听播放参数： defaultSound:"+ defaultSound + ", isCancelled:"+!event.isCancelled() +", isCancellable:"+!getRichSound().isCancellable());
+        if (defaultSound && (!event.isCancelled() || !getRichSound().isCancellable())) {
+            //logger.log("播放111");
             Bukkit.getScheduler().runTask(plugin, () -> getRichSound().play(player));
+        }
     }
 }
